@@ -83,9 +83,15 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
             break
 
     if dump is None:
-        dump = 1
+        dump = n_turns
+        dump_at = 'StartDUMP'
+    elif dump == 'EBE':
+        dump_at = 'ALL'
+    else:
+        dump_at = 'StartDUMP'
 
-    lines_f3[i_start_dp + 1] = f'StartDUMP {dump} 664 101 dumtemp.dat\n'
+
+    lines_f3[i_start_dp + 1] = f'{dump_at} {dump} 664 101 dumtemp.dat\n'
 
     with open(wfold + '/fort.3', 'w') as fid:
         fid.writelines(lines_f3)
@@ -111,9 +117,8 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
         sigma_tbt[:, i_part] = sixdump_part.sigma
         delta_tbt[:, i_part] = sixdump_part.delta
 
-    import pdb; pdb.set_trace()
     f10 = np.loadtxt(f'{wfold}/fort.10')
-    last_turn = np.zeros(f10.shape[0], dtype=np.int64)
+    last_turn = np.zeros(2 * f10.shape[0], dtype=np.int64)
     last_turn[0::2] = f10[:, 21]
     last_turn[1::2] = f10[:, 22]
 
