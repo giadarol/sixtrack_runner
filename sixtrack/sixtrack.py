@@ -125,7 +125,7 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
         sigma_tbt[:, i_part] = sixdump_part.sigma
         delta_tbt[:, i_part] = sixdump_part.delta
 
-    f10 = np.loadtxt(f'{wfold}/fort.10')
+    f10 = np.atleast_2d(np.loadtxt(f'{wfold}/fort.10'))
     last_turn = np.zeros(2 * f10.shape[0], dtype=np.int64)
     last_turn[0::2] = f10[:, 21]
     last_turn[1::2] = f10[:, 22]

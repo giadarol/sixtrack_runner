@@ -30,7 +30,7 @@ line = sixinput.generate_xtrack_line()
 iconv = line.other_info["iconv"]
 
 # Build tracker
-tracker = xt.Tracker(line=line)
+tracker = line
 
 ########################################################
 #                  Search closed orbit                 #
