@@ -4,7 +4,7 @@ import sixtracktools
 import pysixtrack
 
 
-def track_particle_sixtrack(particles, n_turns):
+def track_particle_sixtrack(particles, n_turns, dump=None):
 
     n_part = len(particles.x)
 
@@ -82,7 +82,10 @@ def track_particle_sixtrack(particles, n_turns):
             i_start_dp = ii
             break
 
-    lines_f3[i_start_dp + 1] = 'StartDUMP 1 664 101 dumtemp.dat\n'
+    if dump is None:
+        dump = 1
+
+    lines_f3[i_start_dp + 1] = f'StartDUMP {dump} 664 101 dumtemp.dat\n'
 
     with open(wfold + '/fort.3', 'w') as fid:
         fid.writelines(lines_f3)
@@ -108,12 +111,19 @@ def track_particle_sixtrack(particles, n_turns):
         sigma_tbt[:, i_part] = sixdump_part.sigma
         delta_tbt[:, i_part] = sixdump_part.delta
 
+    import pdb; pdb.set_trace()
+    f10 = np.loadtxt(f'{wfold}/fort.10')
+    last_turn = np.zeros(f10.shape[0], dtype=np.int64)
+    last_turn[0::2] = f10[:, 21]
+    last_turn[1::2] = f10[:, 22]
+
     out = {'x':   x_tbt,
            'px':  px_tbt,
            'y':   y_tbt,
            'py':  py_tbt,
            'zeta': sigma_tbt,
            'delta': delta_tbt,
+           'last_turn': last_turn
            }
 
     return out
