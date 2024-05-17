@@ -87,6 +87,7 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
         dump_at = 'StartDUMP'
     elif dump == 'EBE':
         dump_at = 'ALL'
+        dump = 1
     else:
         dump_at = 'StartDUMP'
 
@@ -101,15 +102,22 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
     # Load sixtrack tracking data
     sixdump_all = sixtracktools.SixDump101('%s/dumtemp.dat' % wfold)
 
-    x_tbt = np.zeros((n_turns, n_part))
-    px_tbt = np.zeros((n_turns, n_part))
-    y_tbt = np.zeros((n_turns, n_part))
-    py_tbt = np.zeros((n_turns, n_part))
-    sigma_tbt = np.zeros((n_turns, n_part))
-    delta_tbt = np.zeros((n_turns, n_part))
 
     for i_part in range(n_part):
         sixdump_part = sixdump_all[i_part::n_part]
+
+        if i_part == 0:
+            # Allocate
+            n_rows = len(sixdump_part.s)
+            s_tbt = np.zeros((n_rows, n_part))
+            x_tbt = np.zeros((n_rows, n_part))
+            px_tbt = np.zeros((n_rows, n_part))
+            y_tbt = np.zeros((n_rows, n_part))
+            py_tbt = np.zeros((n_rows, n_part))
+            sigma_tbt = np.zeros((n_rows, n_part))
+            delta_tbt = np.zeros((n_rows, n_part))
+
+        s_tbt[:, i_part] = sixdump_part.s
         x_tbt[:, i_part] = sixdump_part.x
         px_tbt[:, i_part] = sixdump_part.px
         y_tbt[:, i_part] = sixdump_part.y
@@ -122,7 +130,8 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
     last_turn[0::2] = f10[:, 21]
     last_turn[1::2] = f10[:, 22]
 
-    out = {'x':   x_tbt,
+    out = {'s':   s_tbt,
+           'x':   x_tbt,
            'px':  px_tbt,
            'y':   y_tbt,
            'py':  py_tbt,
