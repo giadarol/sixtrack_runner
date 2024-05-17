@@ -97,7 +97,7 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
     with open(wfold + '/fort.3', 'w') as fid:
         fid.writelines(lines_f3)
 
-    os.system('./runsix_trackfun')
+    os.system('(cd temp_trackfun; sixtrack 2>&1 | tee fort.6)')
 
     # Load sixtrack tracking data
     sixdump_all = sixtracktools.SixDump101('%s/dumtemp.dat' % wfold)
