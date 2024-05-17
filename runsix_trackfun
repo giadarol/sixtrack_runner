@@ -1,2 +1,2 @@
 #!/bin/bash
-(cd temp_trackfun; sixtrack >fort.6)
+(cd temp_trackfun; sixtrack 2>&1 | tee fort.6)
