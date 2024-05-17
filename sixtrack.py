@@ -108,5 +108,13 @@ def track_particle_sixtrack(particles, n_turns):
         sigma_tbt[:, i_part] = sixdump_part.sigma
         delta_tbt[:, i_part] = sixdump_part.delta
 
-    return x_tbt, px_tbt, y_tbt, py_tbt, sigma_tbt, delta_tbt
+    out = {'x':   x_tbt,
+           'px':  px_tbt,
+           'y':   y_tbt,
+           'py':  py_tbt,
+           'zeta': sigma_tbt,
+           'delta': delta_tbt,
+           }
+
+    return out
 
