@@ -1,7 +1,6 @@
 import numpy as np
 import os
 import sixtracktools
-import pysixtrack
 
 
 def track_particle_sixtrack(particles, n_turns, dump=None):
