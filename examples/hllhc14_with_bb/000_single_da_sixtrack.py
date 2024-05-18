@@ -4,8 +4,10 @@
 # ######################################### #
 
 import json
+import itertools
 
 import numpy as np
+import pandas as pd
 
 import sixtracktools
 from sixtrack import track_particle_sixtrack
@@ -56,6 +58,49 @@ xo.assert_allclose(out_2turns['x'][-1], tw_nobb.x[0], atol=1e-10, rtol=0)
 xo.assert_allclose(out_2turns['y'][-1], tw_nobb.y[0], atol=1e-10, rtol=0)
 xo.assert_allclose(out_2turns['delta'][-1], tw_nobb.delta[0], atol=1e-10, rtol=0)
 
+tw = line.twiss()
 
+shift_r_vector = np.linspace(-0.01, 0.01, 16)
 
+r_min = 2
+r_max = 10
+n_r = 256
+n_angles = 5
+delta_max = 27.e-5
+nemitt_x = 2.5e-6
+nemitt_y = 2.5e-6
 
+shift = 0
+
+radial_list = np.linspace(r_min + shift, r_max + shift, n_r,
+                           endpoint=False)
+theta_list = np.linspace(0, 90, n_angles + 2)[1:-1]
+
+# Define particle distribution as a cartesian product of the above
+particle_list = [(particle_id, ii[1], ii[0]) for particle_id, ii
+         in enumerate(itertools.product(theta_list, radial_list))]
+
+particle_df = pd.DataFrame(particle_list,
+            columns=["particle_id", "normalized amplitude in xy-plane",
+                     "angle in xy-plane [deg]"])
+
+r_vect = particle_df["normalized amplitude in xy-plane"].values
+theta_vect = particle_df["angle in xy-plane [deg]"].values * np.pi / 180  # type: ignore # [rad]
+
+A1_in_sigma = r_vect * np.cos(theta_vect)
+A2_in_sigma = r_vect * np.sin(theta_vect)
+
+particles = line.build_particles(
+        x_norm=A1_in_sigma,
+        y_norm=A2_in_sigma,
+        delta=delta_max,
+        scale_with_transverse_norm_emitt=(nemitt_x, nemitt_y),
+)
+
+out_da = track_particle_sixtrack(particles, n_turns=100000, dump=None)
+
+with open('da_sim.json', 'w') as fid:
+    json.dump({
+            'particles_init': particles.to_dict(),
+            'last_turn': out_da['last_turn']},
+            fid, cls=xo.JEncoder)
