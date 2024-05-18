@@ -94,12 +94,12 @@ particles = line.build_particles(
 particles_track = particles.copy(_context=xo.context_default)
 line.track(particles_track, num_turns=100000, with_progress=10)
 
-particles.sort(interleave_lost_particles=True)
+particles_track.sort(interleave_lost_particles=True)
 
 with open(f'da_sim_{ishift}_xsuite.json', 'w') as fid:
     json.dump({
              'ishift': ishift,
              'shift': shift,
              'particles_init': particles.to_dict(),
-             'last_turn': particles.at_turn},
+             'last_turn': particles_track.at_turn},
              fid, cls=xo.JEncoder)
