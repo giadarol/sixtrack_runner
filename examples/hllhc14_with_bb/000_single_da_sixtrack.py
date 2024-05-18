@@ -109,6 +109,7 @@ with open(f'da_sim_{ishift}.json', 'w') as fid:
              'ishift': ishift,
              'shift': shift,
              'particles_init': particles.to_dict(),
-             'last_turn': out_da['last_turn']},
+             'last_turn': out_da['last_turn'],
              'f10': out_da['f10'],
-             fid, cls=xo.JEncoder)
+        },
+        fid, cls=xo.JEncoder)
