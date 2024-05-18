@@ -14,6 +14,7 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
     if os.path.exists(wfold):
         raise ValueError('Folder exists!')
 
+    os.system(f'mkdir {wfold}')
     os.system('cp fort.* %s' % wfold)
 
     with open('fort.3', 'r') as fid:
