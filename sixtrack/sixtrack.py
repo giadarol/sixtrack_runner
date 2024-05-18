@@ -1,16 +1,18 @@
 import numpy as np
 import os
 import sixtracktools
+import uuid
 
 
 def track_particle_sixtrack(particles, n_turns, dump=None):
 
     n_part = len(particles.x)
 
-    wfold = 'temp_trackfun'
+    # get a unique folder name
+    wfold = 'temp_' + str(uuid.uuid4())
 
-    if not os.path.exists(wfold):
-        os.mkdir(wfold)
+    if os.path.exists(wfold):
+        raise ValueError('Folder exists!')
 
     os.system('cp fort.* %s' % wfold)
 
@@ -136,7 +138,8 @@ def track_particle_sixtrack(particles, n_turns, dump=None):
            'py':  py_tbt,
            'zeta': sigma_tbt,
            'delta': delta_tbt,
-           'last_turn': last_turn
+           'last_turn': last_turn,
+           'f10': f10,
            }
 
     return out

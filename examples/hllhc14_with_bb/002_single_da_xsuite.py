@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 
 import sixtracktools
-from sixtrack import track_particle_sixtrack
 
 import xobjects as xo
 import xtrack as xt
@@ -53,16 +52,6 @@ line.vars['beambeam_scale'] = 1.
 xf.configure_orbit_dependent_parameters_for_bb(line,
         particle_on_co=tw_nobb.particle_on_co)
 
-two_co = xt.Particles.merge(2 * [tw_nobb.particle_on_co])
-
-# out_ebe = track_particle_sixtrack(two_co, n_turns=1, dump='EBE')
-out_2turns = track_particle_sixtrack(two_co, n_turns=2, dump=1)
-
-# Check that xsuite orbit is closed also in sixtrack
-xo.assert_allclose(out_2turns['x'][-1], tw_nobb.x[0], atol=1e-10, rtol=0)
-xo.assert_allclose(out_2turns['y'][-1], tw_nobb.y[0], atol=1e-10, rtol=0)
-xo.assert_allclose(out_2turns['delta'][-1], tw_nobb.delta[0], atol=1e-10, rtol=0)
-
 tw = line.twiss()
 
 shift_r_vector = np.linspace(-0.01, 0.01, 16)
@@ -102,12 +91,15 @@ particles = line.build_particles(
         scale_with_transverse_norm_emitt=(nemitt_x, nemitt_y),
 )
 
-out_da = track_particle_sixtrack(particles, n_turns=100000, dump=None)
+particles_track = particles.copy(_context=xo.context_default)
+line.track(particles_track, num_turns=100000, with_progress=10)
+
+particles.sort(interleave_lost_particles=True)
 
 with open(f'da_sim_{ishift}.json', 'w') as fid:
     json.dump({
              'ishift': ishift,
              'shift': shift,
              'particles_init': particles.to_dict(),
-             'last_turn': out_da['last_turn']},
+             'last_turn': particles.at_turn},
              fid, cls=xo.JEncoder)
