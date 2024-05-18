@@ -96,7 +96,7 @@ line.track(particles_track, num_turns=100000, with_progress=10)
 
 particles.sort(interleave_lost_particles=True)
 
-with open(f'da_sim_{ishift}.json', 'w') as fid:
+with open(f'da_sim_{ishift}_xsuite.json', 'w') as fid:
     json.dump({
              'ishift': ishift,
              'shift': shift,
