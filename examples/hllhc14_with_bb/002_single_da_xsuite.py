@@ -54,7 +54,7 @@ xf.configure_orbit_dependent_parameters_for_bb(line,
 
 tw = line.twiss()
 
-shift_r_vector = np.linspace(-0.01, 0.01, 16)
+shift_r_vector = np.linspace(-0.01, 0.01, 64)
 
 r_min = 2
 r_max = 10

@@ -65,7 +65,7 @@ xo.assert_allclose(out_2turns['delta'][-1], tw_nobb.delta[0], atol=1e-10, rtol=0
 
 tw = line.twiss()
 
-shift_r_vector = np.linspace(-0.01, 0.01, 16)
+shift_r_vector = np.linspace(-0.01, 0.01, 64)
 
 r_min = 2
 r_max = 10
