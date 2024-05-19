@@ -52,7 +52,7 @@ r_min_lost = []
 
 for i_sim in range(16):
 
-    with open(f'da_sim_{i_sim}_xsuite.json', 'r') as fid:
+    with open(f'da_sim_{i_sim}.json', 'r') as fid:
         data = json.load(fid)
 
     particles = xp.Particles.from_dict(data['particles_init'])
@@ -69,16 +69,16 @@ for i_sim in range(16):
     r_min_lost.append(min_r_lost_run)
 
 
-import matplotlib.pyplot as plt
-plt.close('all')
-plt.figure(1)
-plt.plot(r_init, last_turn, '.')
+# import matplotlib.pyplot as plt
+# plt.close('all')
+# plt.figure(1)
+# plt.plot(r_init, last_turn, '.')
 
-plt.figure(2)
-plt.plot(norm.x_norm, norm.y_norm, '.')
-plt.plot(norm.x_norm[mask_lost], norm.y_norm[mask_lost], 'rx')
+# plt.figure(2)
+# plt.plot(norm.x_norm, norm.y_norm, '.')
+# plt.plot(norm.x_norm[mask_lost], norm.y_norm[mask_lost], 'rx')
 
-plt.show()
+# plt.show()
 
 
 
