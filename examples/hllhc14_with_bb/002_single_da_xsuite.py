@@ -90,6 +90,8 @@ particles = line.build_particles(
         delta=delta_max,
         scale_with_transverse_norm_emitt=(nemitt_x, nemitt_y),
 )
+line.discard_tracker()
+line.build_tracker(_context=xo.ContextCpu(omp_num_threads=4))
 
 particles_track = particles.copy(_context=xo.context_default)
 line.track(particles_track, num_turns=100000, with_progress=10)
