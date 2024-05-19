@@ -92,7 +92,7 @@ particles = line.build_particles(
 )
 line.optimize_for_tracking()
 line.discard_tracker()
-line.build_tracker()
+line.build_tracker(_context=xo.ContextCpu(omp_num_threads=4))
 
 particles_track = particles.copy(_context=xo.context_default)
 line.track(particles_track, num_turns=100000, with_progress=10)
